@@ -1,0 +1,9 @@
+### Create Note
+PUT http://localhost:3000/notes/3
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwiaWF0IjoxNzMxNTE3MjIxfQ.6Jiolrgj4tPjErmflUaCVXHmXPXq44dFkorABK9niEw
+
+{
+    "title": "Updated Note",
+    "content": "This is the updated content of the note."
+}
