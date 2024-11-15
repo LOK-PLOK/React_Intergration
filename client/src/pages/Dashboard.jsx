@@ -4,18 +4,18 @@ import axios from "axios";
 import CreateNoteModal from "../components/CreateNoteModal";
 import EditNoteModal from "../components/EditNoteModal";
 import DeleteNoteModal from "../components/DeleteNoteModal";
-import ViewNoteModal from "../components/ViewNoteModal"; // Import the ViewNoteModal component
+import ViewNoteModal from "../components/ViewNoteModal";
 
 function Dashboard() {
   const [notes, setNotes] = useState([]);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [editId, setEditId] = useState(null); // State to track the note being edited
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false); // State to control create modal visibility
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // State to control edit modal visibility
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false); // State to control delete modal visibility
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false); // State to control view modal visibility
-  const [selectedNote, setSelectedNote] = useState(null); // State to store the selected note's details
+  const [editId, setEditId] = useState(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [selectedNote, setSelectedNote] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -34,11 +34,9 @@ function Dashboard() {
           Authorization: token,
         },
       });
-      console.log("Response:", response); // Log the response
       if (response.status === 200) {
         setNotes(response.data);
       } else {
-        console.error("Error fetching notes:", response.data);
         navigate("/unauthorized");
       }
     } catch (error) {
@@ -59,17 +57,13 @@ function Dashboard() {
           },
         }
       );
-
-      console.log("Response:", response); // Log the response
-
       if (response.status === 201) {
         fetchNotes();
         setTitle("");
         setContent("");
-        setEditId(null); // Reset editId after creating a note
+        setEditId(null);
         closeCreateModal();
       } else {
-        console.error("Error creating note:", response.data);
         alert(
           "Error creating note: " + (response.data.message || "Unknown error")
         );
@@ -95,17 +89,13 @@ function Dashboard() {
           },
         }
       );
-
-      console.log("Response:", response); // Log the response
-
       if (response.status === 200) {
         fetchNotes();
         setTitle("");
         setContent("");
-        setEditId(null); // Reset editId after updating a note
+        setEditId(null);
         closeEditModal();
       } else {
-        console.error("Error updating note:", response.data);
         alert(
           "Error updating note: " + (response.data.message || "Unknown error")
         );
@@ -126,7 +116,6 @@ function Dashboard() {
           Authorization: token,
         },
       });
-
       if (response.status === 200) {
         fetchNotes();
         closeDeleteModal();
@@ -196,7 +185,7 @@ function Dashboard() {
           {notes.map((note) => (
             <div
               key={note.id}
-              className="bg-white p-6 rounded-lg shadow-lg cursor-pointer hover:bg-gray-200 transition relative w-80" // Set a fixed width for the card
+              className="bg-white p-6 rounded-lg shadow-lg cursor-pointer hover:bg-gray-200 transition relative w-80"
               onClick={() => handleNoteClick(note)}
             >
               <button
@@ -209,17 +198,18 @@ function Dashboard() {
                 &times;
               </button>
               <h3 className="text-xl font-semibold">{note.title}</h3>
-              <p className="mt-2 truncate mb-10">{note.content}</p>{" "}
-              {/* Truncate the content */}
-              <button
-                className="absolute bottom-2 right-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleEditNote(note);
-                }}
-              >
-                Edit
-              </button>
+              <p className="mt-2 truncate mb-10">{note.content}</p>
+              <div className="flex justify-end">
+                <button
+                  className="absolute bottom-2 right-2 bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditNote(note);
+                  }}
+                >
+                  Edit
+                </button>
+              </div>
             </div>
           ))}
         </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -7,19 +8,22 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('/users/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email }),
-    });
+    try {
+      const response = await axios.post('/users/login', { email }, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-    if (response.ok) {
-      const data = await response.json();
-      localStorage.setItem('token', data.token);
-      navigate('/dashboard');
-    } else {
+      if (response.status === 200) {
+        const data = response.data;
+        localStorage.setItem('token', data.token);
+        navigate('/dashboard');
+      } else {
+        alert('Invalid email');
+      }
+    } catch (error) {
+      console.error('Error logging in:', error);
       alert('Invalid email');
     }
   };
